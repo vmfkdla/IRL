@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>여동생 셋, 관심은 하나</title>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ■ 저장소 루트에 함께 올릴 파일 (index.html과 같은 위치)
+
+       bgm.mp3
+       01.png ~ 20.png    서도희  (1 편안함 → 20 불만)
+       21.png ~ 40.png    강윤슬
+       41.png ~ 60.png    서다온
+       og.png             (선택) 링크 공유용 썸네일
+
+     ■ 배포 전 고쳐야 할 곳 두 군데
+       ① 아래 og: 메타의 vmfkdla.github.io/imouto/ → 실제 저장소 주소
+       ② 파일 맨 아래 스크립트의 CONFIG.PLAY_URL → 크랙 링크
+     ═══════════════════════════════════════════════════════════ -->
+
+<meta property="og:type" content="website">
+<meta property="og:title" content="여동생 셋, 관심은 하나">
+<meta property="og:description" content="방 넷짜리 집, 세 사람, 그리고 하나뿐인 관심.">
+<meta property="og:image" content="https://vmfkdla.github.io/imouto/og.png">
+<meta property="og:url" content="https://vmfkdla.github.io/imouto/">
+<meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+/* ══════════ 토큰 ══════════ */
+:root{
+  --paper:#f7efe2;
+  --paper-lit:#fffaf2;
+  --paper-deep:#ece0cd;
+  --ink:#2e2429;
+  --ink-soft:#7c6a6f;
+  --line:rgba(46,36,41,.14);
+
+  --fire:#d93a2b;   /* 서도희 */
+  --moon:#46618f;   /* 강윤슬 */
+  --star:#e5a310;   /* 서다온 */
+
+  --display:'Hahmlet',serif;
+  --body:'IBM Plex Sans KR',system-ui,sans-serif;
+  --hand:'Gaegu',cursive;
+
+  --bar:56px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:var(--bar)}
+body{
+  font-family:var(--body);font-weight:300;
+  background:var(--paper);color:var(--ink);
+  line-height:1.8;-webkit-font-smoothing:antialiased;overflow-x:hidden;
+}
+body.locked{overflow:hidden;height:100%}
+img{display:block;max-width:100%}
+button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer}
+:focus-visible{outline:2px solid var(--fire);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+.wrap{max-width:1040px;margin:0 auto;padding:0 20px}
+.band{padding:80px 0}
+.band + .band{border-top:1px solid var(--line)}
+.eyebrow{font-weight:500;font-size:.72rem;letter-spacing:.26em;
+  color:var(--ink-soft);text-transform:uppercase;margin-bottom:10px}
+h2.head{font-family:var(--display);font-weight:800;
+  font-size:clamp(1.5rem,4.4vw,2.15rem);line-height:1.32;
+  letter-spacing:-.01em;margin-bottom:8px}
+.sub{color:var(--ink-soft);font-size:.94rem;margin-bottom:36px;max-width:56ch}
+
+/* ══════════ 타이틀 게이트 ══════════ */
+#gate{position:fixed;inset:0;z-index:300}
+#gate.open{pointer-events:none}
+.gate-half{position:absolute;top:0;height:100%;width:50.3%;overflow:hidden;
+  transition:transform 1s cubic-bezier(.72,0,.18,1)}
+.gate-half.l{left:0}
+.gate-half.r{right:0}
+.gate-bg{position:absolute;top:0;height:100%;width:100vw;
+  background:radial-gradient(ellipse 66% 52% at 50% 43%,#5d4237,#33262a 62%,#1f181b);
+  box-shadow:inset 0 0 190px 60px rgba(16,11,13,.6)}
+.gate-half.l .gate-bg{left:0}
+.gate-half.r .gate-bg{right:0}
+#gate.open .gate-half.l{transform:translateX(-100%)}
+#gate.open .gate-half.r{transform:translateX(100%)}
+
+.gate-in{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;padding:24px;text-align:center;
+  color:#fff6e9;transition:opacity .45s ease}
+#gate.open .gate-in{opacity:0}
+.seal{font-family:var(--display);font-weight:800;font-size:2.3rem;line-height:1;
+  width:72px;height:72px;display:grid;place-items:center;
+  border:1px solid rgba(255,236,205,.42);margin-bottom:26px}
+.gate-title{font-family:var(--display);font-weight:800;
+  font-size:clamp(1.9rem,7.2vw,3.4rem);line-height:1.24;letter-spacing:-.02em}
+.gate-line{font-size:.88rem;color:rgba(255,246,233,.66);margin-top:14px;letter-spacing:.05em}
+.dots{display:flex;gap:9px;margin:28px 0 32px}
+.dots i{width:8px;height:8px;border-radius:50%;display:block}
+.enter{font-family:var(--display);font-weight:600;font-size:1rem;letter-spacing:.14em;
+  color:#fff6e9;border:1px solid rgba(255,236,205,.55);
+  padding:15px 48px;position:relative;overflow:hidden;
+  transition:background .35s ease,letter-spacing .35s ease}
+.enter::before{content:"";position:absolute;inset:0;
+  background:linear-gradient(90deg,transparent,rgba(255,236,205,.2),transparent);
+  transform:translateX(-100%);animation:sweep 3.6s ease-in-out infinite}
+@keyframes sweep{0%,62%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
+.enter:hover{background:rgba(255,236,205,.13);letter-spacing:.2em}
+.gate-hint{font-size:.73rem;color:rgba(255,246,233,.44);margin-top:18px;letter-spacing:.1em}
+
+/* ══════════ 상단 바 ══════════ */
+.topbar{position:sticky;top:0;z-index:80;height:var(--bar);
+  background:rgba(247,239,226,.92);backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.topbar-in{max-width:1180px;margin:0 auto;padding:0 16px;height:100%;
+  display:flex;align-items:center;gap:14px}
+.brand{font-family:var(--display);font-weight:800;font-size:1.2rem;
+  text-decoration:none;color:var(--ink);flex:none;line-height:1}
+.navlinks{display:flex;gap:18px;margin-right:auto;overflow-x:auto;
+  scrollbar-width:none;-ms-overflow-style:none}
+.navlinks::-webkit-scrollbar{display:none}
+.navlinks a{font-size:.83rem;color:var(--ink-soft);text-decoration:none;
+  white-space:nowrap;padding:4px 0;border-bottom:1.5px solid transparent;transition:.2s}
+.navlinks a:hover{color:var(--ink);border-bottom-color:var(--fire)}
+.snd{display:flex;align-items:center;gap:7px;flex:none}
+.icobtn{width:32px;height:32px;display:grid;place-items:center;border-radius:50%;
+  color:var(--ink-soft);transition:.2s}
+.icobtn:hover{background:var(--paper-deep);color:var(--ink)}
+#vol{width:64px;accent-color:#a9743f;cursor:pointer}
+.play-sm{flex:none;background:var(--ink);color:var(--paper-lit);font-size:.8rem;
+  font-weight:500;padding:8px 16px;text-decoration:none;transition:.2s;white-space:nowrap}
+.play-sm:hover{background:var(--fire)}
+@media(max-width:640px){#vol{display:none}.navlinks{gap:13px}.navlinks a{font-size:.78rem}}
+
+/* ══════════ 히어로 (이미지 없음) ══════════ */
+.hero{position:relative;min-height:72svh;display:flex;align-items:center;
+  justify-content:center;text-align:center;padding:92px 20px 78px;overflow:hidden}
+.hero::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 72% 56% at 50% 40%,rgba(228,193,138,.34),transparent 72%)}
+.hero-in{position:relative;max-width:740px}
+.hero h1{font-family:var(--display);font-weight:800;
+  font-size:clamp(2rem,7.4vw,3.5rem);line-height:1.2;letter-spacing:-.025em}
+.hero-rule{width:40px;height:1px;background:var(--ink);opacity:.3;margin:26px auto}
+.hero-line{font-size:clamp(.9rem,2.6vw,1.05rem);color:var(--ink-soft)}
+.who{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:30px}
+.who span{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink-soft)}
+.who i{width:7px;height:7px;border-radius:50%;display:block}
+
+/* ══════════ 세계관 ══════════ */
+.lead{font-family:var(--display);font-weight:600;
+  font-size:clamp(1.05rem,3vw,1.32rem);line-height:1.75;
+  max-width:40ch;margin-bottom:44px}
+.w-row{display:grid;grid-template-columns:104px 1fr;gap:26px;
+  padding:24px 0;border-top:1px solid var(--line)}
+.w-row:last-child{border-bottom:1px solid var(--line)}
+.w-key{font-family:var(--display);font-weight:800;font-size:1.24rem;
+  line-height:1.5;letter-spacing:.02em}
+.w-val{font-size:.94rem}
+@media(max-width:620px){
+  .w-row{grid-template-columns:1fr;gap:4px;padding:20px 0}
+  .w-key{font-size:1.1rem}
+}
+
+/* ══════════ 평면도 ══════════ */
+.plan-wrap{background:var(--paper-lit);border:1px solid var(--line);padding:22px 18px}
+.plan{width:100%;height:auto;display:block}
+.zone{cursor:pointer}
+.zone .lite{fill-opacity:0;transition:fill-opacity .28s ease}
+.zone:hover .lite,.zone.lit .lite,.zone:focus-visible .lite{fill-opacity:.15}
+.zone text,.zone .fx{pointer-events:none}
+.rm{font-family:'IBM Plex Sans KR',sans-serif;font-size:19px;font-weight:400;
+  fill:#6b5b60;letter-spacing:2px}
+.rm-s{font-family:'IBM Plex Sans KR',sans-serif;font-size:15px;font-weight:300;fill:#a08d92}
+.legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.lg{display:inline-flex;align-items:center;gap:9px;font-size:.82rem;
+  padding:9px 16px;border:1px solid var(--line);background:var(--paper);
+  color:var(--ink-soft);transition:.2s}
+.lg:hover{color:var(--ink);border-color:var(--ink-soft)}
+.lg i{width:8px;height:8px;border-radius:50%;display:block;flex:none}
+.plan-note{font-size:.82rem;color:var(--ink-soft);margin-top:16px}
+
+/* ══════════ 인물 카드 ══════════ */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.card{background:var(--paper-lit);border:1px solid var(--line);overflow:hidden;
+  text-align:left;transition:.25s;display:flex;flex-direction:column;border-top:4px solid}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 34px rgba(46,36,41,.1)}
+.card-img{aspect-ratio:4/3;background:var(--paper-deep);overflow:hidden}
+.card-img img{width:100%;height:100%;object-fit:cover;object-position:center 22%}
+.card-body{padding:16px 18px 20px}
+.card-name{font-family:var(--display);font-weight:800;font-size:1.24rem;line-height:1.3}
+.card-meta{font-size:.78rem;color:var(--ink-soft);margin:3px 0 10px}
+.card-line{font-size:.9rem}
+
+/* ══════════ 갤러리 ══════════ */
+.toggle{display:inline-flex;border:1px solid var(--line);overflow:hidden;
+  margin-bottom:22px;background:var(--paper-lit)}
+.toggle button{font-size:.83rem;font-weight:500;padding:9px 20px;
+  color:var(--ink-soft);transition:.2s}
+.toggle button.on{background:var(--ink);color:var(--paper-lit)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:26px}
+.chip{font-size:.82rem;padding:7px 14px;border:1px solid var(--line);
+  border-radius:20px;background:var(--paper-lit);color:var(--ink-soft);transition:.2s}
+.chip:hover{border-color:var(--ink-soft);color:var(--ink)}
+.chip.on{background:var(--ink);border-color:var(--ink);color:var(--paper-lit)}
+.trio{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.trio figure{margin:0}
+.trio figcaption{font-size:.8rem;margin-top:7px;text-align:center}
+.shot{aspect-ratio:3/4;background:var(--paper-deep);overflow:hidden;
+  cursor:zoom-in;position:relative}
+.shot img{width:100%;height:100%;object-fit:cover}
+.ph{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink-soft);
+  font-size:.72rem;text-align:center;padding:8px;line-height:1.6}
+.grid20{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:12px}
+.grid20 figure{margin:0}
+.grid20 figcaption{font-size:.75rem;color:var(--ink-soft);margin-top:5px;text-align:center}
+@media(max-width:560px){.grid20{grid-template-columns:repeat(3,1fr)}.trio{gap:8px}}
+
+/* ══════════ 규칙표 ══════════ */
+.ruleboard{background:var(--paper-lit);border:1px solid var(--line);
+  padding:36px 30px 30px;position:relative;transform:rotate(-.5deg);
+  box-shadow:0 10px 30px rgba(46,36,41,.08);max-width:540px}
+.tape{position:absolute;top:-13px;left:50%;transform:translateX(-50%) rotate(1.6deg);
+  width:96px;height:26px;background:rgba(233,203,150,.7);
+  border-left:1px dashed rgba(46,36,41,.14);border-right:1px dashed rgba(46,36,41,.14)}
+.ruleboard h3{font-family:var(--hand);font-weight:700;font-size:1.5rem;
+  margin-bottom:14px;color:var(--fire)}
+.ruleboard ol{font-family:var(--hand);font-size:1.18rem;line-height:2;padding-left:1.3em}
+.ruleboard .sign{font-family:var(--hand);font-size:1rem;text-align:right;
+  margin-top:18px;color:var(--ink-soft)}
+
+/* ══════════ CTA ══════════ */
+.cta{text-align:center;padding:88px 0 96px;background:var(--paper-deep)}
+.cta h2{font-family:var(--display);font-weight:800;
+  font-size:clamp(1.4rem,4.4vw,2rem);margin-bottom:8px}
+.cta p{color:var(--ink-soft);font-size:.92rem;margin-bottom:28px}
+.cta-btn{display:inline-block;background:var(--ink);color:var(--paper-lit);
+  font-family:var(--display);font-weight:600;font-size:1rem;letter-spacing:.1em;
+  padding:16px 52px;text-decoration:none;transition:.25s}
+.cta-btn:hover{background:var(--fire);transform:translateY(-2px)}
+footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-soft)}
+
+/* ══════════ 모달 ══════════ */
+.modal{position:fixed;inset:0;z-index:150;display:none;
+  background:rgba(30,22,26,.6);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;padding:20px}
+.modal.on{display:flex}
+.sheet{background:var(--paper);max-width:620px;width:100%;max-height:88svh;
+  overflow-y:auto;position:relative;border-top:5px solid}
+.sheet-hd{padding:26px 26px 0}
+.sheet-name{font-family:var(--display);font-weight:800;font-size:1.6rem;line-height:1.25}
+.sheet-meta{font-size:.8rem;color:var(--ink-soft);margin-top:4px}
+.sheet-bd{padding:18px 26px 30px}
+.sheet-bd p{font-size:.93rem;margin-bottom:16px}
+.chipset{display:flex;flex-wrap:wrap;gap:7px;margin:14px 0 20px}
+.tchip{font-size:.76rem;padding:5px 12px;border-radius:20px;
+  background:var(--paper-deep);color:var(--ink-soft)}
+.quote{border-left:3px solid;padding:10px 0 10px 16px;margin:4px 0 22px;
+  font-size:.95rem;background:var(--paper-lit)}
+.quote small{display:block;font-size:.72rem;color:var(--ink-soft);
+  letter-spacing:.16em;margin-bottom:5px}
+.sheet-shots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;
+  display:grid;place-items:center;font-size:1.3rem;background:var(--paper-deep);color:var(--ink-soft)}
+
+/* ══════════ 라이트박스 ══════════ */
+.lb{position:fixed;inset:0;z-index:200;display:none;background:rgba(22,16,19,.94);
+  align-items:center;justify-content:center;touch-action:none}
+.lb.on{display:flex}
+.lb img{max-width:94vw;max-height:88svh;object-fit:contain;
+  transform-origin:center;will-change:transform}
+.lb-cap{position:absolute;bottom:20px;left:0;right:0;text-align:center;
+  color:rgba(255,246,233,.72);font-size:.84rem}
+.lb-x{position:absolute;top:14px;right:16px;color:rgba(255,246,233,.8);
+  font-size:1.8rem;width:42px;height:42px}
+.lb-nav{position:absolute;top:50%;transform:translateY(-50%);
+  color:rgba(255,246,233,.7);font-size:2rem;width:52px;height:72px}
+.lb-nav.p{left:6px}
+.lb-nav.n{right:6px}
+</style>
+</head>
+<body class="locked">
+
+<!-- ══════════ 타이틀 게이트 ══════════ -->
+<div id="gate">
+  <div class="gate-half l"><div class="gate-bg"></div></div>
+  <div class="gate-half r"><div class="gate-bg"></div></div>
+  <div class="gate-in">
+    <div class="seal">妹</div>
+    <div class="gate-title">여동생 셋,<br>관심은 하나</div>
+    <div class="gate-line">네 개의 방, 세 사람, 하나의 관심</div>
+    <div class="dots">
+      <i style="background:#d93a2b"></i><i style="background:#46618f"></i><i style="background:#e5a310"></i>
+    </div>
+    <button class="enter" id="enterBtn">들어가기</button>
+    <div class="gate-hint">배경음악이 함께 켜집니다</div>
+  </div>
+</div>
+
+<!-- ══════════ 상단 바 ══════════ -->
+<header class="topbar">
+  <div class="topbar-in">
+    <a href="#top" class="brand">妹</a>
+    <nav class="navlinks">
+      <a href="#world">세계관</a>
+      <a href="#home">집</a>
+      <a href="#people">인물</a>
+      <a href="#gallery">감정</a>
+      <a href="#rules">규칙</a>
+    </nav>
+    <div class="snd">
+      <button class="icobtn" id="bgmBtn" aria-label="배경음악 켜기/끄기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+      </button>
+      <input type="range" id="vol" min="0" max="100" value="45" aria-label="음량">
+    </div>
+    <a class="play-sm" id="playTop" href="#cta">플레이</a>
+  </div>
+</header>
+
+<main id="top">
+
+<!-- ══════════ 히어로 ══════════ -->
+<section class="hero">
+  <div class="hero-in">
+    <h1>여동생 셋,<br>관심은 하나</h1>
+    <div class="hero-rule"></div>
+    <p class="hero-line">부모님은 해외. 방 넷짜리 집에, 셋과 당신만 남았다.</p>
+    <div class="who">
+      <span><i style="background:#d93a2b"></i>서도희</span>
+      <span><i style="background:#46618f"></i>강윤슬</span>
+      <span><i style="background:#e5a310"></i>서다온</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 세계관 ══════════ -->
+<section class="band" id="world">
+  <div class="wrap">
+    <div class="eyebrow">세계관</div>
+    <h2 class="head">한 집에 넷, 손은 두 개</h2>
+    <p class="sub">특별한 사건은 없습니다. 학기가 흐르고 계절이 바뀌는 생활이 전부입니다.</p>
+
+    <p class="lead">부모님이 집을 비운 사이, 셋은 여전히 다 컸는데도 당신 손이 필요한 척을 한다.</p>
+
+    <div class="w-row">
+      <div class="w-key">집</div>
+      <div class="w-val">방 넷짜리 아파트. 각자 방이 하나씩 있고 나머지는 전부 공용이다. 거실만은 누구의 자리도 아니어서, 하루의 대부분이 거기서 부딪힌다.</div>
+    </div>
+    <div class="w-row">
+      <div class="w-key">셋</div>
+      <div class="w-val">전공은 한국사·문학·철학. 셋 다 성인이고, 셋 다 자기 앞가림은 할 줄 안다. 그런데도 굳이 당신을 부른다. 부르는 방식이 셋 다 다르다.</div>
+    </div>
+    <div class="w-row">
+      <div class="w-key">관심</div>
+      <div class="w-val">이 집에서 제일 모자란 자원. 한 명에게 기울면 나머지 둘이 그걸 본다. 셋을 동시에 만족시키는 방법은 없고, 없다는 걸 셋 다 알고 있다.</div>
+    </div>
+    <div class="w-row">
+      <div class="w-key">하루</div>
+      <div class="w-val">끝나는 이야기가 아니라 이어지는 생활. 학기가 시작되고, 시험이 오고, 방학이 지나간다. 어제 누구 편을 들었는지가 오늘 아침 식탁에 남는다.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 집 ══════════ -->
+<section class="band" id="home">
+  <div class="wrap">
+    <div class="eyebrow">집</div>
+    <h2 class="head">네 개의 방과, 아무의 자리도 아닌 거실</h2>
+    <p class="sub">각자 자기 구역이 있습니다. 구역을 눌러 보세요.</p>
+
+    <div class="plan-wrap">
+      <svg class="plan" viewBox="0 0 640 560" role="img" aria-label="집 평면도">
+        <defs>
+          <radialGradient id="lamp" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#e8b962" stop-opacity=".42"/>
+            <stop offset="100%" stop-color="#e8b962" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+
+        <rect x="30" y="30" width="580" height="500" fill="#fffaf2"/>
+        <circle cx="215" cy="305" r="132" fill="url(#lamp)"/>
+        <ellipse cx="215" cy="300" rx="108" ry="60" fill="#f1e5d3"/>
+
+        <!-- 주방 · 식탁 (윤슬) -->
+        <g class="zone" data-char="yunseul" tabindex="0" role="button" aria-label="주방과 식탁, 강윤슬">
+          <rect class="lite" x="30" y="30" width="370" height="160" fill="#46618f"/>
+          <g class="fx" fill="none" stroke="#a08d92" stroke-width="1.4">
+            <rect x="46" y="46" width="168" height="32" rx="3"/>
+            <rect x="150" y="53" width="34" height="18" rx="2"/>
+            <rect x="250" y="90" width="110" height="62" rx="4"/>
+            <rect x="268" y="72" width="26" height="14" rx="2"/>
+            <rect x="312" y="72" width="26" height="14" rx="2"/>
+            <rect x="268" y="156" width="26" height="14" rx="2"/>
+            <rect x="312" y="156" width="26" height="14" rx="2"/>
+          </g>
+          <circle class="fx" cx="228" cy="121" r="5.5" fill="#46618f"/>
+          <text class="rm" x="120" y="128" text-anchor="middle">주방 · 식탁</text>
+          <rect class="hit" x="30" y="30" width="370" height="160" fill="transparent"/>
+        </g>
+
+        <!-- 거실 (공용) -->
+        <text class="rm" x="215" y="222" text-anchor="middle">거 실</text>
+        <text class="rm-s" x="215" y="246" text-anchor="middle">누구의 자리도 아닌 곳</text>
+        <rect x="386" y="210" width="10" height="56" rx="2" fill="none" stroke="#a08d92" stroke-width="1.4"/>
+
+        <!-- 벽 · 규칙표 (도희) -->
+        <g class="zone" data-char="dohee" tabindex="0" role="button" aria-label="거실 벽의 규칙표, 서도희">
+          <rect class="lite" x="32" y="200" width="86" height="100" fill="#d93a2b"/>
+          <g class="fx">
+            <rect x="37" y="214" width="11" height="52" fill="#fffaf2" stroke="#a08d92" stroke-width="1.2"/>
+            <g stroke="#c9b6ac" stroke-width="1">
+              <line x1="39" y1="224" x2="46" y2="224"/><line x1="39" y1="234" x2="46" y2="234"/>
+              <line x1="39" y1="244" x2="46" y2="244"/><line x1="39" y1="254" x2="46" y2="254"/>
+            </g>
+            <line x1="48" y1="240" x2="56" y2="240" stroke="#d93a2b" stroke-width="1.2"/>
+            <circle cx="62" cy="240" r="5.5" fill="#d93a2b"/>
+          </g>
+          <rect class="hit" x="32" y="200" width="86" height="100" fill="transparent"/>
+        </g>
+
+        <!-- 소파 (다온) -->
+        <g class="zone" data-char="daon" tabindex="0" role="button" aria-label="소파, 서다온">
+          <rect class="lite" x="66" y="322" width="216" height="82" fill="#e5a310"/>
+          <g class="fx" fill="none" stroke="#a08d92" stroke-width="1.4">
+            <rect x="80" y="338" width="190" height="58" rx="9"/>
+            <rect x="80" y="338" width="190" height="15" rx="7"/>
+            <line x1="143" y1="353" x2="143" y2="396"/>
+            <line x1="207" y1="353" x2="207" y2="396"/>
+          </g>
+          <circle class="fx" cx="175" cy="374" r="5.5" fill="#e5a310"/>
+          <rect class="hit" x="66" y="322" width="216" height="82" fill="transparent"/>
+        </g>
+
+        <!-- 현관 (도희) -->
+        <g class="zone" data-char="dohee" tabindex="0" role="button" aria-label="현관, 서도희">
+          <rect class="lite" x="30" y="430" width="160" height="100" fill="#d93a2b"/>
+          <rect class="fx" x="148" y="446" width="34" height="68" rx="2" fill="none" stroke="#a08d92" stroke-width="1.4"/>
+          <text class="rm" x="98" y="458" text-anchor="middle">현 관</text>
+          <circle class="fx" cx="110" cy="482" r="5.5" fill="#d93a2b"/>
+          <rect class="hit" x="30" y="430" width="160" height="100" fill="transparent"/>
+        </g>
+
+        <!-- 욕실 -->
+        <g fill="none" stroke="#a08d92" stroke-width="1.4">
+          <rect x="310" y="468" width="76" height="48" rx="9"/>
+          <circle cx="215" cy="500" r="15"/>
+        </g>
+        <text class="rm" x="330" y="454" text-anchor="middle">욕 실</text>
+
+        <!-- 오른쪽 방 4칸 -->
+        <g class="zone" data-char="yunseul" tabindex="0" role="button" aria-label="강윤슬 방">
+          <rect class="lite" x="400" y="30" width="210" height="125" fill="#46618f"/>
+          <rect class="fx" x="568" y="40" width="26" height="4" fill="#46618f"/>
+          <g class="fx" fill="none" stroke="#a08d92" stroke-width="1.4">
+            <rect x="414" y="92" width="92" height="52" rx="3"/>
+            <rect x="418" y="96" width="84" height="15" rx="2"/>
+            <rect x="524" y="50" width="70" height="28" rx="2"/>
+            <circle cx="559" cy="92" r="10"/>
+          </g>
+          <text class="rm" x="596" y="142" text-anchor="end">윤슬 방</text>
+          <rect class="hit" x="400" y="30" width="210" height="125" fill="transparent"/>
+        </g>
+
+        <g class="zone" data-char="dohee" tabindex="0" role="button" aria-label="서도희 방">
+          <rect class="lite" x="400" y="155" width="210" height="125" fill="#d93a2b"/>
+          <rect class="fx" x="568" y="165" width="26" height="4" fill="#d93a2b"/>
+          <g class="fx" fill="none" stroke="#a08d92" stroke-width="1.4">
+            <rect x="414" y="217" width="92" height="52" rx="3"/>
+            <rect x="418" y="221" width="84" height="15" rx="2"/>
+            <rect x="524" y="175" width="70" height="28" rx="2"/>
+            <circle cx="559" cy="217" r="10"/>
+          </g>
+          <text class="rm" x="596" y="267" text-anchor="end">도희 방</text>
+          <rect class="hit" x="400" y="155" width="210" height="125" fill="transparent"/>
+        </g>
+
+        <g class="zone" data-char="daon" tabindex="0" role="button" aria-label="서다온 방">
+          <rect class="lite" x="400" y="280" width="210" height="125" fill="#e5a310"/>
+          <rect class="fx" x="568" y="290" width="26" height="4" fill="#e5a310"/>
+          <g class="fx" fill="none" stroke="#a08d92" stroke-width="1.4">
+            <rect x="414" y="342" width="92" height="52" rx="3"/>
+            <rect x="418" y="346" width="84" height="15" rx="2"/>
+            <rect x="524" y="300" width="70" height="28" rx="2"/>
+            <circle cx="559" cy="342" r="10"/>
+          </g>
+          <text class="rm" x="596" y="392" text-anchor="end">다온 방</text>
+          <rect class="hit" x="400" y="280" width="210" height="125" fill="transparent"/>
+        </g>
+
+        <rect x="448" y="424" width="148" height="84" fill="none"
+              stroke="#c9b6ac" stroke-width="1.2" stroke-dasharray="5 5"/>
+        <text class="rm" x="522" y="462" text-anchor="middle">당신의 방</text>
+        <text class="rm-s" x="522" y="486" text-anchor="middle">비어 있음</text>
+
+        <!-- 벽 -->
+        <g stroke="#2e2429" fill="none" stroke-linecap="square">
+          <rect x="30" y="30" width="580" height="500" stroke-width="3.5"/>
+          <g stroke-width="2">
+            <line x1="30" y1="190" x2="400" y2="190"/>
+            <line x1="30" y1="430" x2="400" y2="430"/>
+            <line x1="400" y1="30" x2="400" y2="530"/>
+            <line x1="190" y1="430" x2="190" y2="530"/>
+            <line x1="400" y1="155" x2="610" y2="155"/>
+            <line x1="400" y1="280" x2="610" y2="280"/>
+            <line x1="400" y1="405" x2="610" y2="405"/>
+          </g>
+        </g>
+
+        <!-- 개구부 -->
+        <g fill="#fffaf2">
+          <rect x="92" y="187" width="112" height="6"/>
+          <rect x="92" y="427" width="70" height="6"/>
+          <rect x="200" y="427" width="50" height="6"/>
+          <rect x="397" y="42" width="6" height="40"/>
+          <rect x="397" y="167" width="6" height="40"/>
+          <rect x="397" y="292" width="6" height="40"/>
+          <rect x="397" y="417" width="6" height="40"/>
+          <rect x="52" y="527" width="46" height="7"/>
+          <rect x="88" y="27" width="102" height="7"/>
+          <rect x="27" y="310" width="7" height="80"/>
+          <rect x="607" y="60" width="7" height="52"/>
+          <rect x="607" y="185" width="7" height="52"/>
+          <rect x="607" y="310" width="7" height="52"/>
+          <rect x="607" y="435" width="7" height="52"/>
+        </g>
+
+        <!-- 창 -->
+        <g stroke="#8d7a80" stroke-width="1.2" fill="none">
+          <line x1="88" y1="30" x2="190" y2="30"/>
+          <line x1="30" y1="310" x2="30" y2="390"/>
+          <line x1="610" y1="60" x2="610" y2="112"/>
+          <line x1="610" y1="185" x2="610" y2="237"/>
+          <line x1="610" y1="310" x2="610" y2="362"/>
+          <line x1="610" y1="435" x2="610" y2="487"/>
+        </g>
+        <!-- 문 -->
+        <g stroke="#b3a0a6" stroke-width="1.2" fill="none">
+          <path d="M52 530 L52 484 M52 484 A46 46 0 0 1 98 530"/>
+          <path d="M200 430 L200 480 M200 480 A50 50 0 0 0 250 430"/>
+          <path d="M400 42 L440 42 M440 42 A40 40 0 0 1 400 82"/>
+          <path d="M400 167 L440 167 M440 167 A40 40 0 0 1 400 207"/>
+          <path d="M400 292 L440 292 M440 292 A40 40 0 0 1 400 332"/>
+          <path d="M400 417 L440 417 M440 417 A40 40 0 0 1 400 457"/>
+        </g>
+      </svg>
+
+      <div class="legend" id="legend">
+        <button class="lg" data-char="dohee"><i style="background:#d93a2b"></i>서도희 — 현관 · 거실 벽</button>
+        <button class="lg" data-char="yunseul"><i style="background:#46618f"></i>강윤슬 — 주방 · 식탁</button>
+        <button class="lg" data-char="daon"><i style="background:#e5a310"></i>서다온 — 소파</button>
+      </div>
+      <p class="plan-note">당신의 방은 비워 두었습니다. 채우는 건 플레이하는 사람의 몫입니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ 인물 ══════════ -->
+<section class="band" id="people">
+  <div class="wrap">
+    <div class="eyebrow">인물</div>
+    <h2 class="head">세 사람</h2>
+    <p class="sub">카드를 누르면 자세히 볼 수 있습니다.</p>
+    <div class="cards" id="cards"></div>
+  </div>
+</section>
+
+<!-- ══════════ 갤러리 ══════════ -->
+<section class="band" id="gallery">
+  <div class="wrap">
+    <div class="eyebrow">감정</div>
+    <h2 class="head">같은 순간, 세 반응</h2>
+    <p class="sub">감정 하나를 고르면 세 사람이 나란히 섭니다. 축을 바꾸면 인물별로도 볼 수 있습니다.</p>
+    <div class="toggle">
+      <button id="axisEmo" class="on">감정 축</button>
+      <button id="axisChar">인물 축</button>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div id="galBody"></div>
+  </div>
+</section>
+
+<!-- ══════════ 규칙표 ══════════ -->
+<section class="band" id="rules">
+  <div class="wrap">
+    <div class="eyebrow">규칙</div>
+    <h2 class="head">벽에 붙은 종이 한 장</h2>
+    <p class="sub">붙인 사람은 도희, 제일 먼저 어긴 사람도 도희.</p>
+    <div class="ruleboard">
+      <div class="tape"></div>
+      <h3>우리 집 생활 규칙</h3>
+      <ol>
+        <li>기상 7시. 예외 없음.</li>
+        <li>거실 물건은 각자 치운다.</li>
+        <li>설거지는 밥 먹은 사람이.</li>
+        <li>소파에서 자지 말 것.</li>
+        <li>편애 금지.</li>
+      </ol>
+      <div class="sign">— 장녀 서도희</div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ CTA ══════════ -->
+<section class="cta" id="cta">
+  <div class="wrap">
+    <h2>셋 중 하나를 고르러 가기</h2>
+    <p>CRACK에서 플레이할 수 있습니다.</p>
+    <a class="cta-btn" id="playMain" href="#">플레이하기</a>
+  </div>
+</section>
+
+<footer>妹 — 여동생 셋, 관심은 하나</footer>
+</main>
+
+<!-- ══════════ 모달 ══════════ -->
+<div class="modal" id="modal">
+  <div class="sheet" id="sheet">
+    <button class="close" id="modalX" aria-label="닫기">×</button>
+    <div class="sheet-hd">
+      <div class="sheet-name" id="mName"></div>
+      <div class="sheet-meta" id="mMeta"></div>
+    </div>
+    <div class="sheet-bd">
+      <div class="chipset" id="mChips"></div>
+      <p id="mDesc"></p>
+      <div class="quote" id="mQuote"><small>말투</small><span id="mLine"></span></div>
+      <div class="sheet-shots" id="mShots"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ 라이트박스 ══════════ -->
+<div class="lb" id="lb">
+  <button class="lb-x" id="lbX" aria-label="닫기">×</button>
+  <button class="lb-nav p" id="lbP" aria-label="이전">‹</button>
+  <img id="lbImg" alt="">
+  <button class="lb-nav n" id="lbN" aria-label="다음">›</button>
+  <div class="lb-cap" id="lbCap"></div>
+</div>
+
+<audio id="bgm" loop preload="none" src="bgm.mp3"></audio>
+
+<script>
+/* ══════════════════ 설정 ══════════════════ */
+const CONFIG = {
+  PLAY_URL : "",   /* ← 크랙 작품 링크. 비워두면 안내 알럿이 뜹니다 */
+  EXT      : ".png"
+};
+
+/* ══════════════════ 데이터 ══════════════════ */
+const EMOTIONS = ["편안함","즐거움","들뜸","우월감","안심","고마움","짜증","투정","분함","우울",
+                  "무기력","걱정","당혹","외로움","억울","부끄러움","열등감","죄책감","기대","불만"];
+
+const CHARS = [
+  { id:"dohee", name:"서도희", color:"#d93a2b", offset:0,
+    meta:"21세 · 한국사학과 · 장녀",
+    line:"규칙표를 만들고, 자기가 제일 먼저 어긴다",
+    chips:["새벽 운동","벽에 붙인 규칙표","장녀 자의식","서양 암군 연구","얼굴이 먼저 무너짐"],
+    desc:"집안 규칙을 A4에 적어 벽에 붙여 둔 사람. 문제는 그걸 제일 먼저 어기는 것도 본인이라는 것. 루이 16세를 우유부단하다고 씹으면서 정작 저녁 메뉴를 못 정하고, 존 왕 얘기가 나오면 슬쩍 화제를 돌린다. 감정이 얼굴에 먼저 뜨고 입으로 부정하는 쪽.",
+    quote:"야. 이거 3번 조항 위반인 거 알지." },
+  { id:"yunseul", name:"강윤슬", color:"#46618f", offset:20,
+    meta:"22세 · 문학과 졸업반 · 성이 다른 동생",
+    line:"부탁하기 전에 이미 다 해둔 사람",
+    chips:["존댓말을 안 푼다","주방 담당","다른 성씨","표지를 뒤집어 두는 책","시선 회피"],
+    desc:"시키기 전에 끝내 둔다. 애정이라기보다 증명에 가깝다. 성이 다르다는 걸 아무도 입에 올리지 않고, 그래서 본인만 계속 의식한다. 방에서 읽는 책은 전부 표지가 뒤집혀 있는데, 본인은 문학사적 가치로만 설명한다.",
+    quote:"아, 그거요. …벌써 해뒀어요. 괜찮아요." },
+  { id:"daon", name:"서다온", color:"#e5a310", offset:40,
+    meta:"20세 · 철학과 · 막내",
+    line:"뭘 시키든 일단 값부터 부른다",
+    chips:["소파 붙박이","흥정","칸트는 반박용","프로이트로 언니 진단","웃을 때만 눈이 뜨임"],
+    desc:"심부름은 거래다. 칸트의 의무론은 지시를 반박할 때만 인용하고, 프로이트는 언니들 속마음을 멋대로 진단할 때만 쓴다. 늘 반쯤 감긴 눈이 확 뜨이는 순간은 딱 하나 — 거래가 성사됐을 때.",
+    quote:"음~ 그건 좀 비싼데. 아이스크림 두 개?" }
+];
+
+const $  = (s,r=document)=>r.querySelector(s);
+const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
+const pad = n => String(n).padStart(2,"0");
+const src = (ch,i) => pad(ch.offset + i + 1) + CONFIG.EXT;
+
+/* 이미지가 아직 없어도 사이트가 깨지지 않게 */
+function shot(ch,i){
+  const d = document.createElement("div");
+  d.className = "shot";
+  const img = new Image();
+  img.alt = ch.name + " · " + EMOTIONS[i];
+  img.src = src(ch,i);
+  img.onerror = ()=>{
+    img.remove();
+    d.insertAdjacentHTML("beforeend",
+      `<div class="ph">${pad(ch.offset+i+1)}${CONFIG.EXT}<br>${ch.name} · ${EMOTIONS[i]}</div>`);
+    d.style.cursor = "default";
+  };
+  d.appendChild(img);
+  return d;
+}
+
+/* ══════════════════ 타이틀 게이트 ══════════════════ */
+$("#enterBtn").addEventListener("click", ()=>{
+  const gate = $("#gate");
+  gate.classList.add("open");
+  document.body.classList.remove("locked");
+  startBgm();
+  setTimeout(()=>gate.remove(), 1100);
+});
+
+/* ══════════════════ BGM ══════════════════ */
+const bgm = $("#bgm");
+let bgmOn = false;
+function startBgm(){
+  bgm.volume = $("#vol").value / 100;
+  bgm.play().then(()=>{ bgmOn = true; paintBgm(); }).catch(()=>{ bgmOn = false; paintBgm(); });
+}
+function paintBgm(){ $("#bgmBtn").style.opacity = bgmOn ? "1" : ".38"; }
+$("#bgmBtn").addEventListener("click", ()=>{
+  if(bgmOn){ bgm.pause(); bgmOn = false; paintBgm(); } else { startBgm(); }
+});
+$("#vol").addEventListener("input", e => bgm.volume = e.target.value / 100);
+paintBgm();
+
+/* ══════════════════ 인물 카드 ══════════════════ */
+(function(){
+  const box = $("#cards");
+  CHARS.forEach(c=>{
+    const card = document.createElement("button");
+    card.className = "card";
+    card.style.borderTopColor = c.color;
+    card.innerHTML = `<div class="card-img"></div>
+      <div class="card-body">
+        <div class="card-name">${c.name}</div>
+        <div class="card-meta">${c.meta}</div>
+        <div class="card-line">${c.line}</div>
+      </div>`;
+    const im = new Image();
+    im.src = src(c,0); im.alt = c.name;
+    im.onerror = ()=>{ card.querySelector(".card-img").innerHTML =
+      `<div class="ph" style="position:static;height:100%">${pad(c.offset+1)}${CONFIG.EXT}</div>`; };
+    card.querySelector(".card-img").appendChild(im);
+    card.addEventListener("click", ()=>openChar(c.id));
+    box.appendChild(card);
+  });
+})();
+
+/* ══════════════════ 평면도 상호작용 ══════════════════ */
+function light(id,on){
+  $$('.zone[data-char="'+id+'"]').forEach(z=>z.classList.toggle("lit",on));
+}
+$$(".zone").forEach(z=>{
+  const id = z.dataset.char;
+  z.addEventListener("mouseenter", ()=>light(id,true));
+  z.addEventListener("mouseleave", ()=>light(id,false));
+  z.addEventListener("focus", ()=>light(id,true));
+  z.addEventListener("blur", ()=>light(id,false));
+  z.addEventListener("click", ()=>openChar(id));
+  z.addEventListener("keydown", e=>{
+    if(e.key === "Enter" || e.key === " "){ e.preventDefault(); openChar(id); }
+  });
+});
+$$(".lg").forEach(b=>{
+  const id = b.dataset.char;
+  b.addEventListener("mouseenter", ()=>light(id,true));
+  b.addEventListener("mouseleave", ()=>light(id,false));
+  b.addEventListener("click", ()=>openChar(id));
+});
+
+/* ══════════════════ 모달 ══════════════════ */
+function openChar(id){
+  const c = CHARS.find(x=>x.id === id);
+  if(!c) return;
+  $("#sheet").style.borderTopColor = c.color;
+  $("#mName").textContent = c.name;
+  $("#mMeta").textContent = c.meta;
+  $("#mDesc").textContent = c.desc;
+  $("#mLine").textContent = c.quote;
+  $("#mQuote").style.borderLeftColor = c.color;
+  $("#mChips").innerHTML = c.chips.map(t=>`<span class="tchip">${t}</span>`).join("");
+  const sh = $("#mShots"); sh.innerHTML = "";
+  [0,15,6].forEach(i=>{
+    const s = shot(c,i);
+    s.addEventListener("click", ()=>openLb(c.id,i));
+    sh.appendChild(s);
+  });
+  $("#modal").classList.add("on");
+  document.body.classList.add("locked");
+}
+function closeModal(){ $("#modal").classList.remove("on"); document.body.classList.remove("locked"); }
+$("#modalX").addEventListener("click", closeModal);
+$("#modal").addEventListener("click", e=>{ if(e.target.id === "modal") closeModal(); });
+
+/* ══════════════════ 갤러리 ══════════════════ */
+let axis = "emo", pickEmo = 0, pickChar = 0;
+
+function renderChips(){
+  const box = $("#chips"); box.innerHTML = "";
+  const list = axis === "emo" ? EMOTIONS : CHARS.map(c=>c.name);
+  const cur  = axis === "emo" ? pickEmo : pickChar;
+  list.forEach((t,i)=>{
+    const b = document.createElement("button");
+    b.className = "chip" + (i === cur ? " on" : "");
+    b.textContent = axis === "emo" ? `${i+1} ${t}` : t;
+    b.addEventListener("click", ()=>{
+      if(axis === "emo") pickEmo = i; else pickChar = i;
+      renderChips(); renderGal();
+    });
+    box.appendChild(b);
+  });
+}
+function renderGal(){
+  const box = $("#galBody"); box.innerHTML = "";
+  if(axis === "emo"){
+    const g = document.createElement("div"); g.className = "trio";
+    CHARS.forEach(c=>{
+      const f = document.createElement("figure");
+      const s = shot(c, pickEmo);
+      s.addEventListener("click", ()=>openLb(c.id, pickEmo));
+      f.appendChild(s);
+      f.insertAdjacentHTML("beforeend",
+        `<figcaption style="color:${c.color}">${c.name}</figcaption>`);
+      g.appendChild(f);
+    });
+    box.appendChild(g);
+  } else {
+    const c = CHARS[pickChar];
+    const g = document.createElement("div"); g.className = "grid20";
+    EMOTIONS.forEach((e,i)=>{
+      const f = document.createElement("figure");
+      const s = shot(c,i);
+      s.addEventListener("click", ()=>openLb(c.id,i));
+      f.appendChild(s);
+      f.insertAdjacentHTML("beforeend", `<figcaption>${i+1} ${e}</figcaption>`);
+      g.appendChild(f);
+    });
+    box.appendChild(g);
+  }
+}
+$("#axisEmo").addEventListener("click", ()=>{
+  axis = "emo"; $("#axisEmo").classList.add("on"); $("#axisChar").classList.remove("on");
+  renderChips(); renderGal();
+});
+$("#axisChar").addEventListener("click", ()=>{
+  axis = "char"; $("#axisChar").classList.add("on"); $("#axisEmo").classList.remove("on");
+  renderChips(); renderGal();
+});
+renderChips(); renderGal();
+
+/* ══════════════════ 라이트박스 ══════════════════ */
+let lbChar = 0, lbIdx = 0, zoom = 1, ox = 0, oy = 0;
+const lb = $("#lb"), lbImg = $("#lbImg");
+
+function openLb(id,i){
+  lbChar = CHARS.findIndex(c=>c.id === id); lbIdx = i;
+  paintLb(); lb.classList.add("on"); document.body.classList.add("locked");
+}
+function paintLb(){
+  const c = CHARS[lbChar];
+  zoom = 1; ox = 0; oy = 0; apply();
+  lbImg.src = src(c, lbIdx);
+  lbImg.alt = c.name + " · " + EMOTIONS[lbIdx];
+  $("#lbCap").textContent = `${c.name} · ${lbIdx+1} ${EMOTIONS[lbIdx]}`;
+}
+function apply(){ lbImg.style.transform = `translate(${ox}px,${oy}px) scale(${zoom})`; }
+function closeLb(){
+  lb.classList.remove("on");
+  if(!$("#modal").classList.contains("on")) document.body.classList.remove("locked");
+}
+function step(d){ lbIdx = (lbIdx + d + 20) % 20; paintLb(); }
+
+$("#lbX").addEventListener("click", closeLb);
+$("#lbP").addEventListener("click", e=>{ e.stopPropagation(); step(-1); });
+$("#lbN").addEventListener("click", e=>{ e.stopPropagation(); step(1); });
+lb.addEventListener("click", e=>{ if(e.target === lb) closeLb(); });
+document.addEventListener("keydown", e=>{
+  if(lb.classList.contains("on")){
+    if(e.key === "Escape") closeLb();
+    if(e.key === "ArrowLeft") step(-1);
+    if(e.key === "ArrowRight") step(1);
+  } else if($("#modal").classList.contains("on") && e.key === "Escape") closeModal();
+});
+lbImg.addEventListener("dblclick", ()=>{ zoom = zoom > 1 ? 1 : 2.4; ox = 0; oy = 0; apply(); });
+lb.addEventListener("wheel", e=>{
+  e.preventDefault();
+  zoom = Math.min(4, Math.max(1, zoom - e.deltaY * 0.0016));
+  if(zoom === 1){ ox = 0; oy = 0; }
+  apply();
+}, {passive:false});
+
+/* 터치: 핀치 줌 · 드래그 · 스와이프 */
+let pts = new Map(), baseD = 0, baseZ = 1, sx = 0, sy = 0, moved = false;
+function dist(){
+  const a = [...pts.values()];
+  return Math.hypot(a[0].x - a[1].x, a[0].y - a[1].y);
+}
+lb.addEventListener("pointerdown", e=>{
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pts.size === 1){ sx = e.clientX; sy = e.clientY; moved = false; }
+  if(pts.size === 2){ baseD = dist(); baseZ = zoom; }
+});
+lb.addEventListener("pointermove", e=>{
+  if(!pts.has(e.pointerId)) return;
+  const prev = pts.get(e.pointerId);
+  pts.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(pts.size === 2){
+    const d = dist();
+    if(baseD) zoom = Math.min(4, Math.max(1, baseZ * d / baseD));
+    apply();
+  } else if(pts.size === 1 && zoom > 1){
+    ox += e.clientX - prev.x; oy += e.clientY - prev.y; moved = true; apply();
+  }
+});
+function endPt(e){
+  if(pts.size === 1 && zoom === 1 && !moved){
+    const dx = e.clientX - sx, dy = e.clientY - sy;
+    if(Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) step(dx < 0 ? 1 : -1);
+  }
+  pts.delete(e.pointerId);
+  if(pts.size < 2) baseD = 0;
+}
+lb.addEventListener("pointerup", endPt);
+lb.addEventListener("pointercancel", endPt);
+
+/* ══════════════════ 플레이 링크 ══════════════════ */
+["#playTop","#playMain"].forEach(sel=>{
+  const a = $(sel);
+  if(CONFIG.PLAY_URL){ a.href = CONFIG.PLAY_URL; a.target = "_blank"; a.rel = "noopener"; }
+  else if(sel === "#playMain"){
+    a.addEventListener("click", e=>{
+      e.preventDefault();
+      alert("공개 예정입니다. 링크가 나오면 CONFIG.PLAY_URL에 넣어 주세요.");
+    });
+  }
+});
+</script>
+</body>
+</html>
