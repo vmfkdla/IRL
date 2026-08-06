@@ -4,32 +4,32 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>여동생 셋, 관심은 하나</title>
-
+ 
 <!-- ═══════════════════════════════════════════════════════════
      ■ 저장소 루트에 함께 올릴 파일 (index.html과 같은 위치)
-
+ 
        bgm.mp3
-       01.png ~ 20.png    서도희  (1 편안함 → 20 불만)
+       1.png ~ 20.png     서도희  (1 편안함 → 20 불만)
        21.png ~ 40.png    강윤슬
        41.png ~ 60.png    서다온
        og.png             (선택) 링크 공유용 썸네일
-
+ 
      ■ 배포 전 고쳐야 할 곳 두 군데
        ① 아래 og: 메타의 vmfkdla.github.io/imouto/ → 실제 저장소 주소
        ② 파일 맨 아래 스크립트의 CONFIG.PLAY_URL → 크랙 링크
      ═══════════════════════════════════════════════════════════ -->
-
+ 
 <meta property="og:type" content="website">
 <meta property="og:title" content="여동생 셋, 관심은 하나">
 <meta property="og:description" content="방 넷짜리 집, 세 사람, 그리고 하나뿐인 관심.">
 <meta property="og:image" content="https://vmfkdla.github.io/imouto/og.png">
 <meta property="og:url" content="https://vmfkdla.github.io/imouto/">
 <meta name="twitter:card" content="summary_large_image">
-
+ 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Hahmlet:wght@400;600;800&family=IBM+Plex+Sans+KR:wght@300;400;500;600&family=Gaegu:wght@400;700&display=swap" rel="stylesheet">
-
+ 
 <style>
 /* ══════════ 토큰 ══════════ */
 :root{
@@ -39,15 +39,15 @@
   --ink:#2e2429;
   --ink-soft:#7c6a6f;
   --line:rgba(46,36,41,.14);
-
+ 
   --fire:#d93a2b;   /* 서도희 */
   --moon:#46618f;   /* 강윤슬 */
   --star:#e5a310;   /* 서다온 */
-
+ 
   --display:'Hahmlet',serif;
   --body:'IBM Plex Sans KR',system-ui,sans-serif;
   --hand:'Gaegu',cursive;
-
+ 
   --bar:56px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -62,7 +62,7 @@ img{display:block;max-width:100%}
 button{font-family:inherit;color:inherit;border:0;background:none;cursor:pointer}
 :focus-visible{outline:2px solid var(--fire);outline-offset:3px}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;transition-duration:.01ms!important}}
-
+ 
 .wrap{max-width:1040px;margin:0 auto;padding:0 20px}
 .band{padding:80px 0}
 .band + .band{border-top:1px solid var(--line)}
@@ -72,7 +72,7 @@ h2.head{font-family:var(--display);font-weight:800;
   font-size:clamp(1.5rem,4.4vw,2.15rem);line-height:1.32;
   letter-spacing:-.01em;margin-bottom:8px}
 .sub{color:var(--ink-soft);font-size:.94rem;margin-bottom:36px;max-width:56ch}
-
+ 
 /* ══════════ 타이틀 게이트 ══════════ */
 #gate{position:fixed;inset:0;z-index:300}
 #gate.open{pointer-events:none}
@@ -87,7 +87,7 @@ h2.head{font-family:var(--display);font-weight:800;
 .gate-half.r .gate-bg{right:0}
 #gate.open .gate-half.l{transform:translateX(-100%)}
 #gate.open .gate-half.r{transform:translateX(100%)}
-
+ 
 .gate-in{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;
   align-items:center;justify-content:center;padding:24px;text-align:center;
   color:#fff6e9;transition:opacity .45s ease}
@@ -110,7 +110,7 @@ h2.head{font-family:var(--display);font-weight:800;
 @keyframes sweep{0%,62%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .enter:hover{background:rgba(255,236,205,.13);letter-spacing:.2em}
 .gate-hint{font-size:.73rem;color:rgba(255,246,233,.44);margin-top:18px;letter-spacing:.1em}
-
+ 
 /* ══════════ 상단 바 ══════════ */
 .topbar{position:sticky;top:0;z-index:80;height:var(--bar);
   background:rgba(247,239,226,.92);backdrop-filter:blur(12px);
@@ -134,7 +134,7 @@ h2.head{font-family:var(--display);font-weight:800;
   font-weight:500;padding:8px 16px;text-decoration:none;transition:.2s;white-space:nowrap}
 .play-sm:hover{background:var(--fire)}
 @media(max-width:640px){#vol{display:none}.navlinks{gap:13px}.navlinks a{font-size:.78rem}}
-
+ 
 /* ══════════ 히어로 (이미지 없음) ══════════ */
 .hero{position:relative;min-height:72svh;display:flex;align-items:center;
   justify-content:center;text-align:center;padding:92px 20px 78px;overflow:hidden}
@@ -148,7 +148,7 @@ h2.head{font-family:var(--display);font-weight:800;
 .who{display:flex;gap:22px;justify-content:center;flex-wrap:wrap;margin-top:30px}
 .who span{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--ink-soft)}
 .who i{width:7px;height:7px;border-radius:50%;display:block}
-
+ 
 /* ══════════ 세계관 ══════════ */
 .lead{font-family:var(--display);font-weight:600;
   font-size:clamp(1.05rem,3vw,1.32rem);line-height:1.75;
@@ -163,7 +163,7 @@ h2.head{font-family:var(--display);font-weight:800;
   .w-row{grid-template-columns:1fr;gap:4px;padding:20px 0}
   .w-key{font-size:1.1rem}
 }
-
+ 
 /* ══════════ 평면도 ══════════ */
 .plan-wrap{background:var(--paper-lit);border:1px solid var(--line);padding:22px 18px}
 .plan{width:100%;height:auto;display:block}
@@ -181,7 +181,7 @@ h2.head{font-family:var(--display);font-weight:800;
 .lg:hover{color:var(--ink);border-color:var(--ink-soft)}
 .lg i{width:8px;height:8px;border-radius:50%;display:block;flex:none}
 .plan-note{font-size:.82rem;color:var(--ink-soft);margin-top:16px}
-
+ 
 /* ══════════ 인물 카드 ══════════ */
 .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
 .card{background:var(--paper-lit);border:1px solid var(--line);overflow:hidden;
@@ -193,7 +193,7 @@ h2.head{font-family:var(--display);font-weight:800;
 .card-name{font-family:var(--display);font-weight:800;font-size:1.24rem;line-height:1.3}
 .card-meta{font-size:.78rem;color:var(--ink-soft);margin:3px 0 10px}
 .card-line{font-size:.9rem}
-
+ 
 /* ══════════ 갤러리 ══════════ */
 .toggle{display:inline-flex;border:1px solid var(--line);overflow:hidden;
   margin-bottom:22px;background:var(--paper-lit)}
@@ -217,7 +217,7 @@ h2.head{font-family:var(--display);font-weight:800;
 .grid20 figure{margin:0}
 .grid20 figcaption{font-size:.75rem;color:var(--ink-soft);margin-top:5px;text-align:center}
 @media(max-width:560px){.grid20{grid-template-columns:repeat(3,1fr)}.trio{gap:8px}}
-
+ 
 /* ══════════ 규칙표 ══════════ */
 .ruleboard{background:var(--paper-lit);border:1px solid var(--line);
   padding:36px 30px 30px;position:relative;transform:rotate(-.5deg);
@@ -230,7 +230,7 @@ h2.head{font-family:var(--display);font-weight:800;
 .ruleboard ol{font-family:var(--hand);font-size:1.18rem;line-height:2;padding-left:1.3em}
 .ruleboard .sign{font-family:var(--hand);font-size:1rem;text-align:right;
   margin-top:18px;color:var(--ink-soft)}
-
+ 
 /* ══════════ CTA ══════════ */
 .cta{text-align:center;padding:88px 0 96px;background:var(--paper-deep)}
 .cta h2{font-family:var(--display);font-weight:800;
@@ -241,7 +241,7 @@ h2.head{font-family:var(--display);font-weight:800;
   padding:16px 52px;text-decoration:none;transition:.25s}
 .cta-btn:hover{background:var(--fire);transform:translateY(-2px)}
 footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-soft)}
-
+ 
 /* ══════════ 모달 ══════════ */
 .modal{position:fixed;inset:0;z-index:150;display:none;
   background:rgba(30,22,26,.6);backdrop-filter:blur(4px);
@@ -264,7 +264,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
 .sheet-shots{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .close{position:absolute;top:12px;right:12px;width:34px;height:34px;border-radius:50%;
   display:grid;place-items:center;font-size:1.3rem;background:var(--paper-deep);color:var(--ink-soft)}
-
+ 
 /* ══════════ 라이트박스 ══════════ */
 .lb{position:fixed;inset:0;z-index:200;display:none;background:rgba(22,16,19,.94);
   align-items:center;justify-content:center;touch-action:none}
@@ -282,7 +282,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
 </style>
 </head>
 <body class="locked">
-
+ 
 <!-- ══════════ 타이틀 게이트 ══════════ -->
 <div id="gate">
   <div class="gate-half l"><div class="gate-bg"></div></div>
@@ -298,7 +298,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     <div class="gate-hint">배경음악이 함께 켜집니다</div>
   </div>
 </div>
-
+ 
 <!-- ══════════ 상단 바 ══════════ -->
 <header class="topbar">
   <div class="topbar-in">
@@ -319,9 +319,9 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     <a class="play-sm" id="playTop" href="#cta">플레이</a>
   </div>
 </header>
-
+ 
 <main id="top">
-
+ 
 <!-- ══════════ 히어로 ══════════ -->
 <section class="hero">
   <div class="hero-in">
@@ -335,16 +335,16 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     </div>
   </div>
 </section>
-
+ 
 <!-- ══════════ 세계관 ══════════ -->
 <section class="band" id="world">
   <div class="wrap">
     <div class="eyebrow">세계관</div>
     <h2 class="head">한 집에 넷, 손은 두 개</h2>
     <p class="sub">특별한 사건은 없습니다. 학기가 흐르고 계절이 바뀌는 생활이 전부입니다.</p>
-
+ 
     <p class="lead">부모님이 집을 비운 사이, 셋은 여전히 다 컸는데도 당신 손이 필요한 척을 한다.</p>
-
+ 
     <div class="w-row">
       <div class="w-key">집</div>
       <div class="w-val">방 넷짜리 아파트. 각자 방이 하나씩 있고 나머지는 전부 공용이다. 거실만은 누구의 자리도 아니어서, 하루의 대부분이 거기서 부딪힌다.</div>
@@ -363,14 +363,14 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     </div>
   </div>
 </section>
-
+ 
 <!-- ══════════ 집 ══════════ -->
 <section class="band" id="home">
   <div class="wrap">
     <div class="eyebrow">집</div>
     <h2 class="head">네 개의 방과, 아무의 자리도 아닌 거실</h2>
     <p class="sub">각자 자기 구역이 있습니다. 구역을 눌러 보세요.</p>
-
+ 
     <div class="plan-wrap">
       <svg class="plan" viewBox="0 0 640 560" role="img" aria-label="집 평면도">
         <defs>
@@ -379,11 +379,11 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
             <stop offset="100%" stop-color="#e8b962" stop-opacity="0"/>
           </radialGradient>
         </defs>
-
+ 
         <rect x="30" y="30" width="580" height="500" fill="#fffaf2"/>
         <circle cx="215" cy="305" r="132" fill="url(#lamp)"/>
         <ellipse cx="215" cy="300" rx="108" ry="60" fill="#f1e5d3"/>
-
+ 
         <!-- 주방 · 식탁 (윤슬) -->
         <g class="zone" data-char="yunseul" tabindex="0" role="button" aria-label="주방과 식탁, 강윤슬">
           <rect class="lite" x="30" y="30" width="370" height="160" fill="#46618f"/>
@@ -400,12 +400,12 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
           <text class="rm" x="120" y="128" text-anchor="middle">주방 · 식탁</text>
           <rect class="hit" x="30" y="30" width="370" height="160" fill="transparent"/>
         </g>
-
+ 
         <!-- 거실 (공용) -->
         <text class="rm" x="215" y="222" text-anchor="middle">거 실</text>
         <text class="rm-s" x="215" y="246" text-anchor="middle">누구의 자리도 아닌 곳</text>
         <rect x="386" y="210" width="10" height="56" rx="2" fill="none" stroke="#a08d92" stroke-width="1.4"/>
-
+ 
         <!-- 벽 · 규칙표 (도희) -->
         <g class="zone" data-char="dohee" tabindex="0" role="button" aria-label="거실 벽의 규칙표, 서도희">
           <rect class="lite" x="32" y="200" width="86" height="100" fill="#d93a2b"/>
@@ -420,7 +420,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
           </g>
           <rect class="hit" x="32" y="200" width="86" height="100" fill="transparent"/>
         </g>
-
+ 
         <!-- 소파 (다온) -->
         <g class="zone" data-char="daon" tabindex="0" role="button" aria-label="소파, 서다온">
           <rect class="lite" x="66" y="322" width="216" height="82" fill="#e5a310"/>
@@ -433,7 +433,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
           <circle class="fx" cx="175" cy="374" r="5.5" fill="#e5a310"/>
           <rect class="hit" x="66" y="322" width="216" height="82" fill="transparent"/>
         </g>
-
+ 
         <!-- 현관 (도희) -->
         <g class="zone" data-char="dohee" tabindex="0" role="button" aria-label="현관, 서도희">
           <rect class="lite" x="30" y="430" width="160" height="100" fill="#d93a2b"/>
@@ -442,14 +442,14 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
           <circle class="fx" cx="110" cy="482" r="5.5" fill="#d93a2b"/>
           <rect class="hit" x="30" y="430" width="160" height="100" fill="transparent"/>
         </g>
-
+ 
         <!-- 욕실 -->
         <g fill="none" stroke="#a08d92" stroke-width="1.4">
           <rect x="310" y="468" width="76" height="48" rx="9"/>
           <circle cx="215" cy="500" r="15"/>
         </g>
         <text class="rm" x="330" y="454" text-anchor="middle">욕 실</text>
-
+ 
         <!-- 오른쪽 방 4칸 -->
         <g class="zone" data-char="yunseul" tabindex="0" role="button" aria-label="강윤슬 방">
           <rect class="lite" x="400" y="30" width="210" height="125" fill="#46618f"/>
@@ -463,7 +463,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
           <text class="rm" x="596" y="142" text-anchor="end">윤슬 방</text>
           <rect class="hit" x="400" y="30" width="210" height="125" fill="transparent"/>
         </g>
-
+ 
         <g class="zone" data-char="dohee" tabindex="0" role="button" aria-label="서도희 방">
           <rect class="lite" x="400" y="155" width="210" height="125" fill="#d93a2b"/>
           <rect class="fx" x="568" y="165" width="26" height="4" fill="#d93a2b"/>
@@ -476,7 +476,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
           <text class="rm" x="596" y="267" text-anchor="end">도희 방</text>
           <rect class="hit" x="400" y="155" width="210" height="125" fill="transparent"/>
         </g>
-
+ 
         <g class="zone" data-char="daon" tabindex="0" role="button" aria-label="서다온 방">
           <rect class="lite" x="400" y="280" width="210" height="125" fill="#e5a310"/>
           <rect class="fx" x="568" y="290" width="26" height="4" fill="#e5a310"/>
@@ -489,12 +489,12 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
           <text class="rm" x="596" y="392" text-anchor="end">다온 방</text>
           <rect class="hit" x="400" y="280" width="210" height="125" fill="transparent"/>
         </g>
-
+ 
         <rect x="448" y="424" width="148" height="84" fill="none"
               stroke="#c9b6ac" stroke-width="1.2" stroke-dasharray="5 5"/>
         <text class="rm" x="522" y="462" text-anchor="middle">당신의 방</text>
         <text class="rm-s" x="522" y="486" text-anchor="middle">비어 있음</text>
-
+ 
         <!-- 벽 -->
         <g stroke="#2e2429" fill="none" stroke-linecap="square">
           <rect x="30" y="30" width="580" height="500" stroke-width="3.5"/>
@@ -508,7 +508,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
             <line x1="400" y1="405" x2="610" y2="405"/>
           </g>
         </g>
-
+ 
         <!-- 개구부 -->
         <g fill="#fffaf2">
           <rect x="92" y="187" width="112" height="6"/>
@@ -526,7 +526,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
           <rect x="607" y="310" width="7" height="52"/>
           <rect x="607" y="435" width="7" height="52"/>
         </g>
-
+ 
         <!-- 창 -->
         <g stroke="#8d7a80" stroke-width="1.2" fill="none">
           <line x1="88" y1="30" x2="190" y2="30"/>
@@ -546,7 +546,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
           <path d="M400 417 L440 417 M440 417 A40 40 0 0 1 400 457"/>
         </g>
       </svg>
-
+ 
       <div class="legend" id="legend">
         <button class="lg" data-char="dohee"><i style="background:#d93a2b"></i>서도희 — 현관 · 거실 벽</button>
         <button class="lg" data-char="yunseul"><i style="background:#46618f"></i>강윤슬 — 주방 · 식탁</button>
@@ -556,7 +556,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     </div>
   </div>
 </section>
-
+ 
 <!-- ══════════ 인물 ══════════ -->
 <section class="band" id="people">
   <div class="wrap">
@@ -566,7 +566,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     <div class="cards" id="cards"></div>
   </div>
 </section>
-
+ 
 <!-- ══════════ 갤러리 ══════════ -->
 <section class="band" id="gallery">
   <div class="wrap">
@@ -581,7 +581,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     <div id="galBody"></div>
   </div>
 </section>
-
+ 
 <!-- ══════════ 규칙표 ══════════ -->
 <section class="band" id="rules">
   <div class="wrap">
@@ -602,7 +602,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     </div>
   </div>
 </section>
-
+ 
 <!-- ══════════ CTA ══════════ -->
 <section class="cta" id="cta">
   <div class="wrap">
@@ -611,10 +611,10 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     <a class="cta-btn" id="playMain" href="#">플레이하기</a>
   </div>
 </section>
-
+ 
 <footer>妹 — 여동생 셋, 관심은 하나</footer>
 </main>
-
+ 
 <!-- ══════════ 모달 ══════════ -->
 <div class="modal" id="modal">
   <div class="sheet" id="sheet">
@@ -631,7 +631,7 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
     </div>
   </div>
 </div>
-
+ 
 <!-- ══════════ 라이트박스 ══════════ -->
 <div class="lb" id="lb">
   <button class="lb-x" id="lbX" aria-label="닫기">×</button>
@@ -640,20 +640,20 @@ footer{padding:26px 0 40px;text-align:center;font-size:.75rem;color:var(--ink-so
   <button class="lb-nav n" id="lbN" aria-label="다음">›</button>
   <div class="lb-cap" id="lbCap"></div>
 </div>
-
+ 
 <audio id="bgm" loop preload="none" src="bgm.mp3"></audio>
-
+ 
 <script>
 /* ══════════════════ 설정 ══════════════════ */
 const CONFIG = {
   PLAY_URL : "",   /* ← 크랙 작품 링크. 비워두면 안내 알럿이 뜹니다 */
   EXT      : ".png"
 };
-
+ 
 /* ══════════════════ 데이터 ══════════════════ */
 const EMOTIONS = ["편안함","즐거움","들뜸","우월감","안심","고마움","짜증","투정","분함","우울",
                   "무기력","걱정","당혹","외로움","억울","부끄러움","열등감","죄책감","기대","불만"];
-
+ 
 const CHARS = [
   { id:"dohee", name:"서도희", color:"#d93a2b", offset:0,
     meta:"21세 · 한국사학과 · 장녀",
@@ -674,12 +674,12 @@ const CHARS = [
     desc:"심부름은 거래다. 칸트의 의무론은 지시를 반박할 때만 인용하고, 프로이트는 언니들 속마음을 멋대로 진단할 때만 쓴다. 늘 반쯤 감긴 눈이 확 뜨이는 순간은 딱 하나 — 거래가 성사됐을 때.",
     quote:"음~ 그건 좀 비싼데. 아이스크림 두 개?" }
 ];
-
+ 
 const $  = (s,r=document)=>r.querySelector(s);
 const $$ = (s,r=document)=>[...r.querySelectorAll(s)];
-const pad = n => String(n).padStart(2,"0");
-const src = (ch,i) => pad(ch.offset + i + 1) + CONFIG.EXT;
-
+const num = n => String(n);            /* 파일명은 1.png ~ 60.png (0 채움 없음) */
+const src = (ch,i) => num(ch.offset + i + 1) + CONFIG.EXT;
+ 
 /* 이미지가 아직 없어도 사이트가 깨지지 않게 */
 function shot(ch,i){
   const d = document.createElement("div");
@@ -690,13 +690,13 @@ function shot(ch,i){
   img.onerror = ()=>{
     img.remove();
     d.insertAdjacentHTML("beforeend",
-      `<div class="ph">${pad(ch.offset+i+1)}${CONFIG.EXT}<br>${ch.name} · ${EMOTIONS[i]}</div>`);
+      `<div class="ph">${num(ch.offset+i+1)}${CONFIG.EXT}<br>${ch.name} · ${EMOTIONS[i]}</div>`);
     d.style.cursor = "default";
   };
   d.appendChild(img);
   return d;
 }
-
+ 
 /* ══════════════════ 타이틀 게이트 ══════════════════ */
 $("#enterBtn").addEventListener("click", ()=>{
   const gate = $("#gate");
@@ -705,7 +705,7 @@ $("#enterBtn").addEventListener("click", ()=>{
   startBgm();
   setTimeout(()=>gate.remove(), 1100);
 });
-
+ 
 /* ══════════════════ BGM ══════════════════ */
 const bgm = $("#bgm");
 let bgmOn = false;
@@ -719,7 +719,7 @@ $("#bgmBtn").addEventListener("click", ()=>{
 });
 $("#vol").addEventListener("input", e => bgm.volume = e.target.value / 100);
 paintBgm();
-
+ 
 /* ══════════════════ 인물 카드 ══════════════════ */
 (function(){
   const box = $("#cards");
@@ -736,13 +736,13 @@ paintBgm();
     const im = new Image();
     im.src = src(c,0); im.alt = c.name;
     im.onerror = ()=>{ card.querySelector(".card-img").innerHTML =
-      `<div class="ph" style="position:static;height:100%">${pad(c.offset+1)}${CONFIG.EXT}</div>`; };
+      `<div class="ph" style="position:static;height:100%">${num(c.offset+1)}${CONFIG.EXT}</div>`; };
     card.querySelector(".card-img").appendChild(im);
     card.addEventListener("click", ()=>openChar(c.id));
     box.appendChild(card);
   });
 })();
-
+ 
 /* ══════════════════ 평면도 상호작용 ══════════════════ */
 function light(id,on){
   $$('.zone[data-char="'+id+'"]').forEach(z=>z.classList.toggle("lit",on));
@@ -764,7 +764,7 @@ $$(".lg").forEach(b=>{
   b.addEventListener("mouseleave", ()=>light(id,false));
   b.addEventListener("click", ()=>openChar(id));
 });
-
+ 
 /* ══════════════════ 모달 ══════════════════ */
 function openChar(id){
   const c = CHARS.find(x=>x.id === id);
@@ -788,10 +788,10 @@ function openChar(id){
 function closeModal(){ $("#modal").classList.remove("on"); document.body.classList.remove("locked"); }
 $("#modalX").addEventListener("click", closeModal);
 $("#modal").addEventListener("click", e=>{ if(e.target.id === "modal") closeModal(); });
-
+ 
 /* ══════════════════ 갤러리 ══════════════════ */
 let axis = "emo", pickEmo = 0, pickChar = 0;
-
+ 
 function renderChips(){
   const box = $("#chips"); box.innerHTML = "";
   const list = axis === "emo" ? EMOTIONS : CHARS.map(c=>c.name);
@@ -844,11 +844,11 @@ $("#axisChar").addEventListener("click", ()=>{
   renderChips(); renderGal();
 });
 renderChips(); renderGal();
-
+ 
 /* ══════════════════ 라이트박스 ══════════════════ */
 let lbChar = 0, lbIdx = 0, zoom = 1, ox = 0, oy = 0;
 const lb = $("#lb"), lbImg = $("#lbImg");
-
+ 
 function openLb(id,i){
   lbChar = CHARS.findIndex(c=>c.id === id); lbIdx = i;
   paintLb(); lb.classList.add("on"); document.body.classList.add("locked");
@@ -866,7 +866,7 @@ function closeLb(){
   if(!$("#modal").classList.contains("on")) document.body.classList.remove("locked");
 }
 function step(d){ lbIdx = (lbIdx + d + 20) % 20; paintLb(); }
-
+ 
 $("#lbX").addEventListener("click", closeLb);
 $("#lbP").addEventListener("click", e=>{ e.stopPropagation(); step(-1); });
 $("#lbN").addEventListener("click", e=>{ e.stopPropagation(); step(1); });
@@ -885,7 +885,7 @@ lb.addEventListener("wheel", e=>{
   if(zoom === 1){ ox = 0; oy = 0; }
   apply();
 }, {passive:false});
-
+ 
 /* 터치: 핀치 줌 · 드래그 · 스와이프 */
 let pts = new Map(), baseD = 0, baseZ = 1, sx = 0, sy = 0, moved = false;
 function dist(){
@@ -919,7 +919,7 @@ function endPt(e){
 }
 lb.addEventListener("pointerup", endPt);
 lb.addEventListener("pointercancel", endPt);
-
+ 
 /* ══════════════════ 플레이 링크 ══════════════════ */
 ["#playTop","#playMain"].forEach(sel=>{
   const a = $(sel);
@@ -927,10 +927,14 @@ lb.addEventListener("pointercancel", endPt);
   else if(sel === "#playMain"){
     a.addEventListener("click", e=>{
       e.preventDefault();
-      alert("공개 예정입니다. 링크가 나오면 CONFIG.PLAY_URL에 넣어 주세요.");
+      alert("https://share.crack.wrtn.ai/tb1y6w");
     });
   }
 });
+</script>
+</body>
+</html>
+ 
 </script>
 </body>
 </html>
